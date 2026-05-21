@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, jsonify
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template, request, jsonify
+import os
+from analyzer.url_check import check_url
 from analyzer.url_check import check_url
 from analyzer.text_check import check_text
 from analyzer.password_check import check_password
@@ -54,4 +58,4 @@ def api_check_password():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
