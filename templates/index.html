@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUYAY — Protect the people you love</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <circle cx="18" cy="18" r="16" stroke="#D2B48C" stroke-width="2.5"/>
+                        <path d="M18 10v9l6 3.5" stroke="#D2B48C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="18" cy="18" r="3" fill="#D2B48C"/>
+                    </svg>
+                </span>
+                <span class="logo-text">KUYAY</span>
+            </div>
+            <p class="header-sub">Your digital shield, in plain language</p>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Is this safe?<br><span class="hero-italic">Let me check it for you.</span></h1>
+        <p class="hero-desc">Paste a link, a message, or a password and I'll tell you if you can trust it. No jargon, no technical noise.</p>
+    </section>
+
+    <!-- TABS -->
+    <nav class="tabs">
+        <button class="tab active" data-tab="url" onclick="switchTab('url')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Link
+        </button>
+        <button class="tab" data-tab="texto" onclick="switchTab('texto')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Message
+        </button>
+        <button class="tab" data-tab="password" onclick="switchTab('password')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Password
+        </button>
+    </nav>
+
+    <!-- INPUT PANELS -->
+    <main class="main">
+        <!-- URL Panel -->
+        <div id="panel-url" class="panel active">
+            <label class="input-label" for="url-input">Paste the link here</label>
+            <div class="input-group">
+                <input type="text" id="url-input" placeholder="https://example.com/verify-account..." autocomplete="off" spellcheck="false">
+                <button class="btn-analyze" onclick="analizarURL()" id="btn-url">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Check
+                </button>
+            </div>
+            <p class="input-hint">With or without https://</p>
+        </div>
+
+        <!-- Texto Panel -->
+        <div id="panel-texto" class="panel">
+            <label class="input-label" for="texto-input">Paste the message here</label>
+            <textarea id="texto-input" rows="5" placeholder="Paste the WhatsApp message, email, or SMS you received..."></textarea>
+            <div class="input-group" style="margin-top: 16px;">
+                <button class="btn-analyze full-width" onclick="analizarTexto()" id="btn-texto">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Check message
+                </button>
+            </div>
+            <p class="input-hint">Include the full text, even typos — they can be a red flag</p>
+        </div>
+
+        <!-- Password Panel -->
+        <div id="panel-password" class="panel">
+            <label class="input-label" for="password-input">Type the password here</label>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Your password..." autocomplete="off">
+                <button class="btn-toggle" onclick="togglePassword()" title="Show/hide">
+                    <svg id="eye-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="btn-analyze" onclick="analizarPassword()" id="btn-password">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Check
+                </button>
+            </div>
+            <p class="input-hint">We don't store it. It's analyzed locally and nothing is saved.</p>
+        </div>
+
+        <!-- RESULTADO -->
+        <div id="resultado" class="resultado hidden">
+            <!-- Semáforo -->
+            <div class="semaforo">
+                <div class="luz" id="luz-roja"></div>
+                <div class="luz" id="luz-amarilla"></div>
+                <div class="luz" id="luz-verde"></div>
+            </div>
+
+            <div id="nivel-texto" class="nivel-texto"></div>
+
+            <!-- Stats bar -->
+            <div id="stats-bar" class="stats-bar">
+                <div id="stat-checks" class="stat-item">
+                    <span class="stat-value" id="checks-value">0/0</span>
+                    <span class="stat-label">Checks passed</span>
+                </div>
+                <div id="stat-confidence" class="stat-item">
+                    <span class="stat-value" id="confidence-value">0%</span>
+                    <span class="stat-label">Confidence</span>
+                </div>
+                <div id="stat-score" class="stat-item">
+                    <span class="stat-value" id="score-value">0%</span>
+                    <span class="stat-label">Risk level</span>
+                </div>
+            </div>
+
+            <div id="puntuacion-bar" class="puntuacion-bar">
+                <div id="puntuacion-fill" class="puntuacion-fill"></div>
+            </div>
+
+            <div id="mensaje-principal" class="mensaje-principal"></div>
+
+            <div id="alertas-container" class="alertas-container"></div>
+
+            <div id="extra-container" class="extra-container"></div>
+
+            <button class="btn-reset" onclick="resetear()">Check something else</button>
+        </div>
+
+        <!-- LOADING -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Analyzing carefully...</p>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>KUYAY — Made with care to protect the people you love most</p>
+        <p class="footer-small">Your grandparent would thank you. This tool doesn't replace common sense.</p>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+            resetear();
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('password-input');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('resultado').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function resetear() {
+            document.getElementById('resultado').classList.add('hidden');
+            document.getElementById('loading').classList.add('hidden');
+            document.querySelectorAll('.luz').forEach(l => l.classList.remove('on'));
+        }
+
+        function mostrarResultado(data) {
+            hideLoading();
+            const resultado = document.getElementById('resultado');
+            resultado.classList.remove('hidden');
+            document.querySelectorAll('.luz').forEach(l => l.classList.remove('on'));
+
+            const luzMap = { verde: 'luz-verde', amarillo: 'luz-amarilla', rojo: 'luz-roja' };
+            document.getElementById(luzMap[data.nivel]).classList.add('on');
+
+            const nivelTextMap = {
+                verde: { text: 'APPEARS SAFE', cls: 'nivel-verde' },
+                amarillo: { text: 'CAUTION', cls: 'nivel-amarillo' },
+                rojo: { text: 'DANGER', cls: 'nivel-rojo' }
+            };
+            const nt = nivelTextMap[data.nivel];
+            const nivelEl = document.getElementById('nivel-texto');
+            nivelEl.textContent = nt.text;
+            nivelEl.className = 'nivel-texto ' + nt.cls;
+
+            // Stats
+            const checksValue = document.getElementById('checks-value');
+            const confidenceValue = document.getElementById('confidence-value');
+            const scoreValue = document.getElementById('score-value');
+            const statChecks = document.getElementById('stat-checks');
+            const statConfidence = document.getElementById('stat-confidence');
+
+            if (data.checks_passed !== undefined && data.total_checks !== undefined) {
+                checksValue.textContent = data.checks_passed + '/' + data.total_checks;
+                statChecks.style.display = '';
+            } else {
+                statChecks.style.display = 'none';
+            }
+
+            if (data.confidence !== undefined) {
+                confidenceValue.textContent = data.confidence + '%';
+                statConfidence.style.display = '';
+            } else {
+                statConfidence.style.display = 'none';
+            }
+
+            scoreValue.textContent = data.puntuacion + '%';
+
+            // Bar
+            const fill = document.getElementById('puntuacion-fill');
+            fill.style.width = data.puntuacion + '%';
+            fill.className = 'puntuacion-fill ' + nt.cls;
+
+            // Message
+            document.getElementById('mensaje-principal').textContent = data.mensaje;
+
+            // Alerts
+            const alertasContainer = document.getElementById('alertas-container');
+            alertasContainer.innerHTML = '<h3>What I found:</h3>';
+            data.alertas.forEach(a => {
+                const div = document.createElement('div');
+                div.className = 'alerta-item';
+                div.textContent = '\u2022 ' + a;
+                alertasContainer.appendChild(div);
+            });
+
+            // Extra
+            const extraContainer = document.getElementById('extra-container');
+            extraContainer.innerHTML = '';
+
+            if (data.sugerencias && data.sugerencias.length > 0) {
+                extraContainer.innerHTML = '<h3>How to improve it:</h3>';
+                data.sugerencias.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'sugerencia-item';
+                    div.textContent = s;
+                    extraContainer.appendChild(div);
+                });
+            }
+
+            if (data.categorias && Object.keys(data.categorias).length > 0) {
+                extraContainer.innerHTML = '<h3>Manipulation techniques detected:</h3>';
+                Object.entries(data.categorias).forEach(function(entry) {
+                    var cat = entry[0];
+                    var count = entry[1];
+                    const div = document.createElement('div');
+                    div.className = 'categoria-item';
+                    div.innerHTML = '<span class="cat-name">' + cat + '</span><span class="cat-count">' + count + ' signal' + (count > 1 ? 's' : '') + '</span>';
+                    extraContainer.appendChild(div);
+                });
+            }
+
+            resultado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function analizarURL() {
+            const url = document.getElementById('url-input').value.trim();
+            if (!url) return;
+            showLoading();
+            try {
+                const res = await fetch('/api/check-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await res.json();
+                mostrarResultado(data);
+            } catch (e) {
+                hideLoading();
+                alert('Connection error. Make sure the server is running.');
+            }
+        }
+
+        async function analizarTexto() {
+            const texto = document.getElementById('texto-input').value.trim();
+            if (!texto) return;
+            showLoading();
+            try {
+                const res = await fetch('/api/check-text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ texto: texto })
+                });
+                const data = await res.json();
+                mostrarResultado(data);
+            } catch (e) {
+                hideLoading();
+                alert('Connection error. Make sure the server is running.');
+            }
+        }
+
+        async function analizarPassword() {
+            const password = document.getElementById('password-input').value;
+            if (!password) return;
+            showLoading();
+            try {
+                const res = await fetch('/api/check-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+                const data = await res.json();
+                mostrarResultado(data);
+            } catch (e) {
+                hideLoading();
+                alert('Connection error. Make sure the server is running.');
+            }
+        }
+
+        document.getElementById('url-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') analizarURL(); });
+        document.getElementById('password-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') analizarPassword(); });
+    </script>
+</body>
+</html>
